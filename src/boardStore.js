@@ -44,4 +44,18 @@ export const useBoardStore = create((set) => ({
         },
     })),
 
+    deleteTask: (columnId, taskId) => set((state) => {
+        const { [taskId]: deleted, ...restTasks } = state.tasks;
+        return {
+            tasks: restTasks,
+            columns: {
+                ...state.columns,
+                [columnId]: {
+                    ...state.columns[columnId],
+                    taskIds: state.columns[columnId].taskIds.filter((tid) => tid !== taskId),
+                },
+            },
+        };
+    }),
+
 }));

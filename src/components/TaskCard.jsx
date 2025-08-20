@@ -2,14 +2,13 @@ import React from "react";
 import { Draggable } from "@hello-pangea/dnd";
 import { useBoardStore } from "../boardStore";
 
-const TaskCard = ({ taskId, index, columnId }) => {
-    const { tasks, updateTask, } = useBoardStore();
+
+export default function TaskCard({ taskId, index, columnId }) {
+    const { tasks, updateTask, deleteTask } = useBoardStore();
     const task = tasks[taskId];
     const [editing, setEditing] = React.useState(false);
     const [title, setTitle] = React.useState(task.title);
     const [desc, setDesc] = React.useState(task.description || "");
-
-    console.log(tasks, "tasks");
 
     const save = () => {
         updateTask(taskId, title, desc);
@@ -61,7 +60,14 @@ const TaskCard = ({ taskId, index, columnId }) => {
                                     >
                                         Edit
                                     </button>
-                                    <button className="text-sm text-red-600">
+                                    <button
+                                        onClick={() => {
+                                            if (window.confirm("Delete this task?")) {
+                                                deleteTask(columnId, taskId);
+                                            }
+                                        }}
+                                        className="text-sm text-red-600"
+                                    >
                                         Delete
                                     </button>
                                 </div>
@@ -72,5 +78,3 @@ const TaskCard = ({ taskId, index, columnId }) => {
         </Draggable>
     );
 };
-
-export default TaskCard;
