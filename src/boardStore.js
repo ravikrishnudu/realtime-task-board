@@ -14,7 +14,23 @@ export const useBoardStore = create((set) => ({
         };
     }),
 
-  
+    addTask: (columnId, title, description = "") => set((state) => {
+        const id = uuid();
+        const now = new Date().toISOString();
+        return {
+            tasks: {
+                ...state.tasks,
+                [id]: { id, title, description, createdAt: now, updatedAt: now },
+            },
+            columns: {
+                ...state.columns,
+                [columnId]: {
+                    ...state.columns[columnId],
+                    taskIds: [...state.columns[columnId].taskIds, id],
+                },
+            },
+        };
+    }),
 
 
 }));

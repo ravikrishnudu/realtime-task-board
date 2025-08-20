@@ -1,9 +1,10 @@
 import React from "react";
 import { useBoardStore } from "../boardStore";
+import TaskCard from "./TaskCard";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 
 export default function Column({ colId, index }) {
-    const { columns, } = useBoardStore();
+    const { columns, addTask, } = useBoardStore();
     const column = columns[colId];
 
 
@@ -26,10 +27,24 @@ export default function Column({ colId, index }) {
                                 <p>
                                     {column.title}
                                 </p>
+
+                                {column.taskIds.map((taskId, idx) => (
+                                    <TaskCard key={taskId} taskId={taskId} index={idx} columnId={colId} />
+                                ))}
                                 {provided.placeholder}
                             </div>
                         )}
                     </Droppable>
+
+                    <button
+                        onClick={() => {
+                            const taskTitle = prompt("Task title:");
+                            if (taskTitle) addTask(colId, taskTitle);
+                        }}
+                        className="mt-3 px-3 py-1 bg-green-500 text-white rounded"
+                    >
+                        + Add Task
+                    </button>
                 </div>
             )}
         </Draggable>
