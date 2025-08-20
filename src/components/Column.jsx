@@ -4,12 +4,15 @@ import TaskCard from "./TaskCard";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 
 export default function Column({ colId, index }) {
-    const { columns, addTask, } = useBoardStore();
+    const { columns, addTask, updateColumn, deleteColumn } = useBoardStore();
     const column = columns[colId];
+    const [editingTitle, setEditingTitle] = React.useState(false);
+    const [title, setTitle] = React.useState(column.title);
 
-
-    console.log(columns, "cols");
-
+    const saveTitle = () => {
+        updateColumn(colId, title);
+        setEditingTitle(false);
+    };
 
     return (
         <Draggable draggableId={colId} index={index}>
@@ -19,6 +22,37 @@ export default function Column({ colId, index }) {
                     {...provided.draggableProps}
                     ref={provided.innerRef}
                 >
+                    <div className="flex items-center mb-3">
+                        <div {...provided.dragHandleProps} className="mr-2 cursor-move">☰</div>
+                        {editingTitle ? (
+                            <input
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                onBlur={saveTitle}
+                                onKeyDown={(e) => e.key === "Enter" && saveTitle()}
+                                className="flex-grow px-2 py-1"
+                                autoFocus
+                            />
+                        ) : (
+                            <h2
+                                className="font-semibold flex-grow cursor-pointer"
+                                onClick={() => setEditingTitle(true)}
+                            >
+                                {column.title}
+                            </h2>
+                        )}
+                        <button
+                            onClick={() => {
+                                if (window.confirm("Delete this column?")) {
+                                    deleteColumn(colId);
+                                }
+                            }}
+                            className="ml-2 text-red-600 font-bold"
+                        >
+                            &times;
+                        </button>
+                    </div>
+
                     <Droppable droppableId={colId} type="TASK">
                         {(provided) => (
                             <div

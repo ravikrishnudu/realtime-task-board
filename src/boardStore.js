@@ -14,6 +14,18 @@ export const useBoardStore = create((set) => ({
         };
     }),
 
+    deleteColumn: (id) => set((state) => {
+        const { [id]: deleted, ...restColumns } = state.columns;
+        const newTaskIds = state.columnOrder.includes(id) ? state.columns[id].taskIds : [];
+        const newTasks = { ...state.tasks };
+        newTaskIds.forEach((tid) => delete newTasks[tid]);
+        return {
+            columns: restColumns,
+            tasks: newTasks,
+            columnOrder: state.columnOrder.filter((cid) => cid !== id),
+        };
+    }),
+
     addTask: (columnId, title, description = "") => set((state) => {
         const id = uuid();
         const now = new Date().toISOString();
@@ -56,6 +68,26 @@ export const useBoardStore = create((set) => ({
                 },
             },
         };
+    }),
+
+    moveTask: (fromCol, toCol, taskId, destIndex) => set((state) => {
+        const fromTaskIds = state.columns[fromCol].taskIds.filter((tid) => tid !== taskId);
+        const toTaskIds = Array.from(state.columns[toCol].taskIds);
+        toTaskIds.splice(destIndex, 0, taskId);
+        return {
+            columns: {
+                ...state.columns,
+                [fromCol]: { ...state.columns[fromCol], taskIds: fromTaskIds },
+                [toCol]: { ...state.columns[toCol], taskIds: toTaskIds },
+            },
+        };
+    }),
+
+    moveColumn: (fromIndex, toIndex) => set((state) => {
+        const newOrder = Array.from(state.columnOrder);
+        const [removed] = newOrder.splice(fromIndex, 1);
+        newOrder.splice(toIndex, 0, removed);
+        return { columnOrder: newOrder };
     }),
 
 }));
