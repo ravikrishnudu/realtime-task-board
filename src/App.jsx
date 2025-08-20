@@ -1,9 +1,8 @@
-import { useState } from 'react'
 
-import './App.css'
-import { useBoardStore } from "./boardStore";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
-import Column from './components/Column'
+import './App.css';
+import { useBoardStore } from "./boardStore";
+import Column from './components/Column';
 
 function App() {
   const {
