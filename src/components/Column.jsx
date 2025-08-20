@@ -8,6 +8,8 @@ export default function Column({ colId, index }) {
     const column = columns[colId];
 
 
+    console.log(columns, "cols");
+
 
     return (
         <Draggable draggableId={colId} index={index}>

@@ -32,5 +32,16 @@ export const useBoardStore = create((set) => ({
         };
     }),
 
+    updateTask: (id, title, description) => set((state) => ({
+        tasks: {
+            ...state.tasks,
+            [id]: {
+                ...state.tasks[id],
+                title,
+                description,
+                updatedAt: new Date().toISOString(),
+            },
+        },
+    })),
 
 }));
