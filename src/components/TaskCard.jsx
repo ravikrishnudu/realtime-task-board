@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Draggable } from "@hello-pangea/dnd";
 import { useBoardStore } from "../boardStore";
 
@@ -6,9 +6,9 @@ import { useBoardStore } from "../boardStore";
 export default function TaskCard({ taskId, index, columnId }) {
     const { tasks, updateTask, deleteTask } = useBoardStore();
     const task = tasks[taskId];
-    const [editing, setEditing] = React.useState(false);
-    const [title, setTitle] = React.useState(task.title);
-    const [desc, setDesc] = React.useState(task.description || "");
+    const [editing, setEditing] = useState(false);
+    const [title, setTitle] = useState(task.title);
+    const [desc, setDesc] = useState(task.description || "");
 
     const save = () => {
         updateTask(taskId, title, desc);

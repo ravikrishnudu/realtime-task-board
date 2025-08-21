@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useBoardStore } from "../boardStore";
 import TaskCard from "./TaskCard";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
@@ -6,11 +6,14 @@ import { Droppable, Draggable } from "@hello-pangea/dnd";
 export default function Column({ colId, index }) {
     const { columns, addTask, updateColumn, deleteColumn } = useBoardStore();
     const column = columns[colId];
-    const [editingTitle, setEditingTitle] = React.useState(false);
-    const [title, setTitle] = React.useState(column.title);
+    const [editingTitle, setEditingTitle] = useState(false);
+    const [title, setTitle] = useState(column.title);
+
 
     const saveTitle = () => {
-        updateColumn(colId, title);
+        if (title.trim() && title !== column.title) {
+            updateColumn(colId, title.trim());
+        }
         setEditingTitle(false);
     };
 
@@ -34,8 +37,7 @@ export default function Column({ colId, index }) {
                                 autoFocus
                             />
                         ) : (
-                            <h2
-                                className="font-semibold flex-grow cursor-pointer"
+                                <h2 className="font-bold flex-grow cursor-pointer"
                                 onClick={() => setEditingTitle(true)}
                             >
                                 {column.title}
@@ -47,7 +49,7 @@ export default function Column({ colId, index }) {
                                     deleteColumn(colId);
                                 }
                             }}
-                            className="ml-2 text-red-600 font-bold"
+                            className="mr-2 text-red-600 font-bold"
                         >
                             &times;
                         </button>
@@ -60,10 +62,6 @@ export default function Column({ colId, index }) {
                                 ref={provided.innerRef}
                                 className="min-h-[50px]"
                             >
-                                <p>
-                                    {column.title}
-                                </p>
-
                                 {column.taskIds.map((taskId, idx) => (
                                     <TaskCard key={taskId} taskId={taskId} index={idx} columnId={colId} />
                                 ))}
@@ -85,5 +83,4 @@ export default function Column({ colId, index }) {
             )}
         </Draggable>
     );
-};
-
+}

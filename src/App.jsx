@@ -39,17 +39,20 @@ function App() {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold mb-5">Collaborative Task Board (Local Only)</h1>
-      <button
-        onClick={() => {
-          const title = prompt("New column title");
-          if (title) addColumn(title);
-        }}
-        className="mb-6 px-4 py-2 rounded bg-blue-600 text-white"
-      >
-        Add Column
-      </button>
+    <div className="p-4 m-4">
+      <div className="flex flex-col items-center justify-center">
+        <h1 className="text-3xl font-bold mb-5">Collaborative Task Board (Local Only)</h1>
+        <button
+          onClick={() => {
+            const title = prompt("New column title");
+            if (title) addColumn(title);
+          }}
+          className="mb-6 px-4 py-2 rounded bg-blue-600 text-white"
+        >
+          Add Column
+        </button>
+      </div>
+
 
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
